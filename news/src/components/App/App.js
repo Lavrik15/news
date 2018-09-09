@@ -19,13 +19,13 @@ class App extends Component {
     };
     this.onDismiss = this.onDismiss.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
-    this.setTopSearchStories = this.setTopSearchStories.bind(this); 
+    this.setTopSearchStories = this.setTopSearchStories.bind(this);
   }
   setTopSearchStories(result) {
-    this.setState({result})
+    this.setState({ result })
   }
   componentDidMount() {
-    const {searchValue} = this.state; 
+    const { searchValue } = this.state;
 
     fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchValue}`)
       .then(response => response.json())
@@ -39,13 +39,12 @@ class App extends Component {
     const isNotId = item => item.objectID !== id;
     const listUpdate = this.state.result.hits.filter(isNotId);
     this.setState({
-      result: {...this.state.result, hits: listUpdate}
+      result: { ...this.state.result, hits: listUpdate }
     });
   }
   render() {
     console.log(this.state);
     const { result, searchValue } = this.state;
-    if (!result) return null;
     return (
       <div className="App">
         <div className="App-inner">
@@ -53,12 +52,13 @@ class App extends Component {
             onSearchChange={this.onSearchChange}
             searchValue={searchValue}
           >
-        </Search>
-          <Table
-            pattern={searchValue}
-            list={result.hits}
-            onDismiss={this.onDismiss}
-          />
+          </Search>
+          {(!result) ? <h1>Загрузка</h1> :
+            <Table
+              pattern={searchValue}
+              list={result.hits}
+              onDismiss={this.onDismiss}
+            />}
         </div>
       </div>
     );
