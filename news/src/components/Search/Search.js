@@ -1,13 +1,17 @@
 import React from 'react';
+import './Search.css';
 
-const Search = ({ onSearchChange, searchValue, children }) =>
+const Search = ({ onSearchChange, searchValue}) =>
     <form>
-        {children}
-        <input
-            type="text"
-            onChange={onSearchChange}
-            value={searchValue}
-        />
+        <label htmlFor="search-input">Поиск
+            <input
+                id="search-input"
+                type="text"
+                onChange={onSearchChange}
+                value={searchValue}
+                className="input"
+            />
+        </label>
     </form>
 
 export default Search;

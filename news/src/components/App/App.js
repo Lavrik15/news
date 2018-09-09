@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import Table from './components/Table/Table.js';
-import Search from './components/Search/Search.js';
+import Table from '../Table/Table.js';
+import Search from '../Search/Search.js';
 import './App.css';
+
 
 const list = [
   {
@@ -19,7 +20,7 @@ const list = [
     num_comments: 1,
     points: 2,
     objectID: 1
-  },
+  }
 ]
 
 class App extends Component {
@@ -28,7 +29,7 @@ class App extends Component {
 
     this.state = {
       list,
-      searchValue: "react",
+      searchValue: "react"
     };
     this.onDismiss = this.onDismiss.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
@@ -45,17 +46,18 @@ class App extends Component {
     const { list, searchValue } = this.state;
     return (
       <div className="App">
-        <Search
-          onSearchChange={this.onSearchChange}
-          searchValue={searchValue}
-        >Поиск
+        <div className="App-inner">
+          <Search
+            onSearchChange={this.onSearchChange}
+            searchValue={searchValue}
+          >
         </Search>
-        <Table
-          pattern={searchValue}
-          list={list}
-          onDismiss={this.onDismiss}
-        />
-        <h1>{this.state.searchValue}</h1>
+          <Table
+            pattern={searchValue}
+            list={list}
+            onDismiss={this.onDismiss}
+          />
+        </div>
       </div>
     );
   }
