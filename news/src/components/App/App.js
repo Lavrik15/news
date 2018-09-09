@@ -3,47 +3,49 @@ import Table from '../Table/Table.js';
 import Search from '../Search/Search.js';
 import './App.css';
 
-
-const list = [
-  {
-    title: "react",
-    url: "https://reactjs.org/",
-    author: "Petr",
-    num_comments: 3,
-    points: 4,
-    objectID: 0
-  },
-  {
-    title: "react",
-    url: "https://reactjs.org/",
-    author: "Ivan",
-    num_comments: 1,
-    points: 2,
-    objectID: 1
-  }
-]
+const DEAFULT_QUERY = 'react';
+const PATH_BASE = 'https://hn.algolia.com/api/v1';
+const PATH_SEARCH = '/search';
+const PARAM_SEARCH = 'query=';
+const url = `${PATH_BASE}${PARAM_SEARCH}?${PARAM_SEARCH}${DEAFULT_QUERY}`;
 
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      list,
-      searchValue: "react"
+      result: null,
+      searchValue: DEAFULT_QUERY
     };
     this.onDismiss = this.onDismiss.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
+    this.setTopSearchStories = this.setTopSearchStories.bind(this); 
+  }
+  setTopSearchStories(result) {
+    this.setState({result})
+  }
+  componentDidMount() {
+    const {searchValue} = this.state; 
+
+    fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchValue}`)
+      .then(response => response.json())
+      .then(result => this.setTopSearchStories(result))
+      .catch(error => error);
   }
   onSearchChange(event) {
     this.setState({ searchValue: event.target.value });
   }
   onDismiss(id) {
     const isNotId = item => item.objectID !== id;
-    const listUpdate = this.state.list.filter(isNotId);
-    this.setState({ list: listUpdate });
+    const listUpdate = this.state.result.hits.filter(isNotId);
+    this.setState({
+      result: {...this.state.result, hits: listUpdate}
+    });
   }
   render() {
-    const { list, searchValue } = this.state;
+    console.log(this.state);
+    const { result, searchValue } = this.state;
+    if (!result) return null;
     return (
       <div className="App">
         <div className="App-inner">
@@ -54,7 +56,7 @@ class App extends Component {
         </Search>
           <Table
             pattern={searchValue}
-            list={list}
+            list={result.hits}
             onDismiss={this.onDismiss}
           />
         </div>
