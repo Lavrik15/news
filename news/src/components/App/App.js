@@ -20,20 +20,31 @@ class App extends Component {
     this.onDismiss = this.onDismiss.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
     this.setTopSearchStories = this.setTopSearchStories.bind(this);
+    this.fetchSearchTopStories = this.fetchSearchTopStories.bind(this);
+    this.onSearchSubmit = this.onSearchSubmit.bind(this);
+  }
+  fetchSearchTopStories(searchValue) {
+    fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchValue}`)
+    .then(response => response.json())
+    .then(result => this.setTopSearchStories(result))
+    .catch(error => error);
+  }
+  onSearchSubmit(event) {
+    const {searchValue} = this.setState;
+    this.fetchSearchTopStories(searchValue);
+    event.preventDefault();
+  }
+  onSearchChange(event) {
+    this.setState({
+      searchValue: event.target.value
+    });
   }
   setTopSearchStories(result) {
     this.setState({ result })
   }
   componentDidMount() {
     const { searchValue } = this.state;
-
-    fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchValue}`)
-      .then(response => response.json())
-      .then(result => this.setTopSearchStories(result))
-      .catch(error => error);
-  }
-  onSearchChange(event) {
-    this.setState({ searchValue: event.target.value });
+    this.fetchSearchTopStories(searchValue);
   }
   onDismiss(id) {
     const isNotId = item => item.objectID !== id;
@@ -50,8 +61,10 @@ class App extends Component {
         <div className="App-inner">
           <Search
             onSearchChange={this.onSearchChange}
-            searchValue={searchValue}
+            value={searchValue}
+            onSubmit={this.onSearchSubmit}
           >
+          search
           </Search>
           {(!result) ? <h1>loading</h1> :
             <Table

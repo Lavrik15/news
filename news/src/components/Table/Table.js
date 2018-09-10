@@ -2,12 +2,12 @@ import React from 'react';
 import Button from '../Button/Button.js';
 import './Table.css'
 
-const isSearched = searchValue => item =>
-    item.title.toLowerCase().includes(searchValue.toLowerCase());
+// const isSearched = searchValue => item =>
+//     item.title.toLowerCase().includes(searchValue.toLowerCase());
 
 const Table = ({list, pattern, onDismiss}) =>
     <div className="Table">
-        {list.filter(isSearched(pattern)).map(item => {
+        {list.map(item => {
             return (
                 <div key={item.objectID} className="Table-row">
                     <span>
