@@ -13,16 +13,16 @@ const Table = ({list, pattern, onDismiss}) =>
                     <span>
                         <a href={item.url}>{item.title}</a>
                     </span>
-                    <span>{item.author}</span>
-                    <span>{item.num_comments}</span>
-                    <span>{item.points}</span>
+                    <span>Author:{item.author}</span>
+                    <span>Comments:{item.num_comments}</span>
+                    <span>Likes:{item.points}</span>
                     <span>
                         <Button
                             className=""
                             onClick={() => onDismiss(item.objectID)}
                             type="button"
                         >
-                            удалить
+                            remove
                         </Button>
                     </span>
                 </div>

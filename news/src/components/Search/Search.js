@@ -3,7 +3,7 @@ import './Search.css';
 
 const Search = ({ onSearchChange, searchValue}) =>
     <form>
-        <label htmlFor="search-input">Поиск
+        <label htmlFor="search-input">Search
             <input
                 id="search-input"
                 type="text"

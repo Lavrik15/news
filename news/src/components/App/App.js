@@ -53,7 +53,7 @@ class App extends Component {
             searchValue={searchValue}
           >
           </Search>
-          {(!result) ? <h1>Загрузка</h1> :
+          {(!result) ? <h1>loading</h1> :
             <Table
               pattern={searchValue}
               list={result.hits}

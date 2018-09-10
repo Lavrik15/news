@@ -3,4 +3,9 @@
 }
 .Table-row {
     margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed #000;
+}
+.Table-row span {
+    display: block;
 }
