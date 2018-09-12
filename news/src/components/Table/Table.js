@@ -5,7 +5,7 @@ import './Table.css'
 // const isSearched = searchValue => item =>
 //     item.title.toLowerCase().includes(searchValue.toLowerCase());
 
-const Table = ({list, pattern, onDismiss}) =>
+const Table = ({list, onDismiss}) =>
     <div className="Table">
         {list.map(item => {
             return (
