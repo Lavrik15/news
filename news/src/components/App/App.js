@@ -7,7 +7,7 @@ import Select from '../Select/select.js';
 import './App.css';
 
 const DEAFULT_QUERY = 'react';
-const PATH_BASE = 'https://фывыфв.com';
+const PATH_BASE = 'https://hn.algolia.com/api/v1';
 const PATH_SEARCH = '/search';
 const PARAM_SEARCH = 'query=';
 const PARAM_PAGE = 'page=';
@@ -31,16 +31,23 @@ class App extends Component {
     this.onSearchSubmit = this.onSearchSubmit.bind(this);
   }
   fetchSearchTopStories(searchValue, page = 0, hitsPerPage = 5) {
-    fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchValue}&${PARAM_PAGE}${page}&${HITS_PER_PAGE}${hitsPerPage}`)
-      .then(response => response.json())
-      .then(result => this.setTopSearchStories(result))
+    axios({
+      method: 'get',
+      url: `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchValue}&${PARAM_PAGE}${page}&${HITS_PER_PAGE}${hitsPerPage}`,
+      timeout: 10000
+    })
+      .then(result => this.setTopSearchStories(result.data))
       .catch(error => this.setState({ error }))
   }
   onSearchSubmit(event) {
     const { searchValue, result } = this.state;
     const page = (result && result.page) || 0;
     const hitsPerPage = (result && result.hitsPerPage) || 5;
+
+    this.setState({result: null});
+    
     this.fetchSearchTopStories(searchValue, page, hitsPerPage);
+    
     event.preventDefault();
   }
   onSearchChange(event) {
@@ -77,7 +84,6 @@ class App extends Component {
     const page = (result && result.page) || 0;
     const hitsPerPage = (result && result.hitsPerPage) || 5;
 
-    if (error) return <p>something went wrong</p>
     return (
       <div className="App">
         <div className="App-inner">
@@ -92,8 +98,8 @@ class App extends Component {
             onChange={this.onSelectChange}
           />
           {
-            (!result) ? <h1>loading</h1>
-            : (error) ? <p>something went wrong</p>
+            (error) ? <p>something went wrong</p>
+            : (!result) ? <h1>loading</h1> 
             : <Table
                 pattern={searchValue}
                 list={result.hits}
