@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import Table from '../Table/Table.js';
 import Search from '../Search/Search.js';
 import Button from '../Button/Button.js';
@@ -6,7 +7,7 @@ import Select from '../Select/select.js';
 import './App.css';
 
 const DEAFULT_QUERY = 'react';
-const PATH_BASE = 'https://hn.algolia.com/api/v1';
+const PATH_BASE = 'https://фывыфв.com';
 const PATH_SEARCH = '/search';
 const PARAM_SEARCH = 'query=';
 const PARAM_PAGE = 'page=';
@@ -19,7 +20,8 @@ class App extends Component {
 
     this.state = {
       result: null,
-      searchValue: DEAFULT_QUERY
+      searchValue: DEAFULT_QUERY,
+      error: null
     };
     this.onDismiss = this.onDismiss.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
@@ -28,14 +30,14 @@ class App extends Component {
     this.fetchSearchTopStories = this.fetchSearchTopStories.bind(this);
     this.onSearchSubmit = this.onSearchSubmit.bind(this);
   }
-  fetchSearchTopStories(searchValue, page=0, hitsPerPage=5) {
+  fetchSearchTopStories(searchValue, page = 0, hitsPerPage = 5) {
     fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchValue}&${PARAM_PAGE}${page}&${HITS_PER_PAGE}${hitsPerPage}`)
-    .then(response => response.json())
-    .then(result => this.setTopSearchStories(result))
-    .catch(error => error);
+      .then(response => response.json())
+      .then(result => this.setTopSearchStories(result))
+      .catch(error => this.setState({ error }))
   }
   onSearchSubmit(event) {
-    const {searchValue, result} = this.state;
+    const { searchValue, result } = this.state;
     const page = (result && result.page) || 0;
     const hitsPerPage = (result && result.hitsPerPage) || 5;
     this.fetchSearchTopStories(searchValue, page, hitsPerPage);
@@ -47,7 +49,7 @@ class App extends Component {
     });
   }
   onSelectChange(event) {
-    const {searchValue, result} = this.state;
+    const { searchValue, result } = this.state;
     const page = (result && result.page) || 0;
     const hitsPerPage = event.target.value;
     this.fetchSearchTopStories(searchValue, page, hitsPerPage);
@@ -56,7 +58,7 @@ class App extends Component {
     this.setState({ result })
   }
   componentDidMount() {
-    const {searchValue, result} = this.state;
+    const { searchValue, result } = this.state;
     const page = (result && result.page) || 0;
     const hitsPerPage = (result && result.hitsPerPage) || 5;
     this.fetchSearchTopStories(searchValue, page, hitsPerPage);
@@ -71,9 +73,11 @@ class App extends Component {
 
   render() {
     console.log(this.state);
-    const { result, searchValue} = this.state;
+    const { result, searchValue, error } = this.state;
     const page = (result && result.page) || 0;
     const hitsPerPage = (result && result.hitsPerPage) || 5;
+
+    if (error) return <p>something went wrong</p>
     return (
       <div className="App">
         <div className="App-inner">
@@ -82,22 +86,25 @@ class App extends Component {
             value={searchValue}
             onSubmit={this.onSearchSubmit}
           >
-          search
+            search
           </Search>
           <Select
             onChange={this.onSelectChange}
           />
-          {(!result) ? <h1>loading</h1> :
-            <Table
-              pattern={searchValue}
-              list={result.hits}
-              onDismiss={this.onDismiss}
-            />}
-            <Button
-              onClick={() => this.fetchSearchTopStories(searchValue, page + 1, hitsPerPage)}
-            >
-              more
-            </Button>
+          {
+            (!result) ? <h1>loading</h1>
+            : (error) ? <p>something went wrong</p>
+            : <Table
+                pattern={searchValue}
+                list={result.hits}
+                onDismiss={this.onDismiss}
+              />
+          }
+          <Button
+            onClick={() => this.fetchSearchTopStories(searchValue, page + 1, hitsPerPage)}
+          >
+            more
+          </Button>
         </div>
       </div>
     );
