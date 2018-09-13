@@ -1,0 +1,64 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`App there is correct screen 1`] = `
+<div
+  className="App"
+>
+  <div
+    className="App-inner"
+  >
+    <form
+      onSubmit={[Function]}
+    >
+      <label
+        htmlFor="search-input"
+      >
+        Search
+        <input
+          className="input"
+          id="search-input"
+          onChange={[Function]}
+          type="text"
+          value="react"
+        />
+      </label>
+      <button
+        className="undefined btn"
+        onClick={undefined}
+      >
+        search
+      </button>
+    </form>
+    <select
+      id=""
+      name=""
+      onChange={[Function]}
+    >
+      <option
+        value="5"
+      >
+        5
+      </option>
+      <option
+        value="10"
+      >
+        10
+      </option>
+      <option
+        value="25"
+      >
+        25
+      </option>
+    </select>
+    <h1>
+      loading
+    </h1>
+    <button
+      className="undefined btn"
+      onClick={[Function]}
+    >
+      more
+    </button>
+  </div>
+</div>
+`;

@@ -4,15 +4,17 @@ import Table from '../Table/Table.js';
 import Search from '../Search/Search.js';
 import Button from '../Button/Button.js';
 import Select from '../Select/select.js';
-import './App.css';
+import {
+  DEAFULT_QUERY,
+  PATH_BASE,
+  PATH_SEARCH,
+  PARAM_SEARCH,
+  PARAM_PAGE,
+  HITS_PER_PAGE,  
+  url
+} from '../constants/index.js';
 
-const DEAFULT_QUERY = 'react';
-const PATH_BASE = 'https://hn.algolia.com/api/v1';
-const PATH_SEARCH = '/search';
-const PARAM_SEARCH = 'query=';
-const PARAM_PAGE = 'page=';
-const HITS_PER_PAGE = 'hitsPerPage=';
-const url = `${PATH_BASE}${PARAM_SEARCH}?${PARAM_SEARCH}${DEAFULT_QUERY}&${PARAM_PAGE}`;
+import './App.css';
 
 class App extends Component {
   constructor(props) {
@@ -44,10 +46,10 @@ class App extends Component {
     const page = (result && result.page) || 0;
     const hitsPerPage = (result && result.hitsPerPage) || 5;
 
-    this.setState({result: null});
-    
+    this.setState({ result: null });
+
     this.fetchSearchTopStories(searchValue, page, hitsPerPage);
-    
+
     event.preventDefault();
   }
   onSearchChange(event) {
@@ -99,12 +101,12 @@ class App extends Component {
           />
           {
             (error) ? <p>something went wrong</p>
-            : (!result) ? <h1>loading</h1> 
-            : <Table
-                pattern={searchValue}
-                list={result.hits}
-                onDismiss={this.onDismiss}
-              />
+              : (!result) ? <h1>loading</h1>
+                : <Table
+                  pattern={searchValue}
+                  list={result.hits}
+                  onDismiss={this.onDismiss}
+                />
           }
           <Button
             onClick={() => this.fetchSearchTopStories(searchValue, page + 1, hitsPerPage)}
@@ -118,3 +120,9 @@ class App extends Component {
 }
 
 export default App;
+
+export {
+  Button,
+  Search,
+  Table
+};
