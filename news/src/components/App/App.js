@@ -1,26 +1,36 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import Table from '../Table/Table.js';
 import Search from '../Search/Search.js';
 import Button from '../Button/Button.js';
 import Select from '../Select/select.js';
-import './App.css';
+import {
+  DEAFULT_QUERY,
+  PATH_BASE,
+  PATH_SEARCH,
+  PARAM_SEARCH,
+  PARAM_PAGE,
+  HITS_PER_PAGE,  
+  url
+} from '../constants/index.js';
 
-const DEAFULT_QUERY = 'react';
-const PATH_BASE = 'https://hn.algolia.com/api/v1';
-const PATH_SEARCH = '/search';
-const PARAM_SEARCH = 'query=';
-const PARAM_PAGE = 'page=';
-const HITS_PER_PAGE = 'hitsPerPage=';
-const url = `${PATH_BASE}${PARAM_SEARCH}?${PARAM_SEARCH}${DEAFULT_QUERY}&${PARAM_PAGE}`;
+import './App.css';
 
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+<<<<<<< HEAD
       results: null,
       searchKey: "",
       searchValue: DEAFULT_QUERY
+=======
+      result: null,
+      searchValue: DEAFULT_QUERY,
+      error: null,
+      sortKey: "NONE"
+>>>>>>> 5e88de71fcda7e00a92ec3efc0154e4415ffbe02
     };
     this.onDismiss = this.onDismiss.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
@@ -28,18 +38,35 @@ class App extends Component {
     this.setTopSearchStories = this.setTopSearchStories.bind(this);
     this.fetchSearchTopStories = this.fetchSearchTopStories.bind(this);
     this.onSearchSubmit = this.onSearchSubmit.bind(this);
+    this.onSort = this.onSort.bind(this);
   }
-  fetchSearchTopStories(searchValue, page=0, hitsPerPage=5) {
-    fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchValue}&${PARAM_PAGE}${page}&${HITS_PER_PAGE}${hitsPerPage}`)
-    .then(response => response.json())
-    .then(result => this.setTopSearchStories(result))
-    .catch(error => error);
+  fetchSearchTopStories(searchValue, page = 0, hitsPerPage = 5) {
+    axios({
+      method: 'get',
+      url: `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchValue}&${PARAM_PAGE}${page}&${HITS_PER_PAGE}${hitsPerPage}`,
+      timeout: 10000
+    })
+      .then(result => this.setTopSearchStories(result.data))
+      .catch(error => this.setState({ error }))
+  }
+  onSort(sortKey) {
+    this.setState({ sortKey });
   }
   onSearchSubmit(event) {
+<<<<<<< HEAD
     const {searchValue, result} = this.state;
     const page = result.page
     const hitsPerPage = result.hitsPerPage;
+=======
+    const { searchValue, result } = this.state;
+    const page = (result && result.page) || 0;
+    const hitsPerPage = (result && result.hitsPerPage) || 5;
+
+    this.setState({ result: null });
+
+>>>>>>> 5e88de71fcda7e00a92ec3efc0154e4415ffbe02
     this.fetchSearchTopStories(searchValue, page, hitsPerPage);
+
     event.preventDefault();
   }
   onSearchChange(event) {
@@ -48,15 +75,22 @@ class App extends Component {
     });
   }
   onSelectChange(event) {
+<<<<<<< HEAD
     const {searchValue, result} = this.state;
     const page = result.page
     this.fetchSearchTopStories(searchValue, page, event.target.value);
+=======
+    const { searchValue, result } = this.state;
+    const page = (result && result.page) || 0;
+    const hitsPerPage = event.target.value;
+    this.fetchSearchTopStories(searchValue, page, hitsPerPage);
+>>>>>>> 5e88de71fcda7e00a92ec3efc0154e4415ffbe02
   }
   setTopSearchStories(result) {
     this.setState({ result })
   }
   componentDidMount() {
-    const {searchValue, result} = this.state;
+    const { searchValue, result } = this.state;
     const page = (result && result.page) || 0;
     const hitsPerPage = (result && result.hitsPerPage) || 5;
     this.fetchSearchTopStories(searchValue, page, hitsPerPage);
@@ -71,9 +105,10 @@ class App extends Component {
 
   render() {
     console.log(this.state);
-    const { result, searchValue} = this.state;
+    const { result, searchValue, error, sortKey } = this.state;
     const page = (result && result.page) || 0;
     const hitsPerPage = (result && result.hitsPerPage) || 5;
+
     return (
       <div className="App">
         <div className="App-inner">
@@ -82,11 +117,12 @@ class App extends Component {
             value={searchValue}
             onSubmit={this.onSearchSubmit}
           >
-          search
+            search
           </Search>
           <Select
             onChange={this.onSelectChange}
           />
+<<<<<<< HEAD
           {(!result) ? <h1>loading</h1> :
             <Table
               pattern={searchValue}
@@ -99,6 +135,24 @@ class App extends Component {
             >
               more
             </Button>
+=======
+          {
+            (error) ? <p>something went wrong</p>
+              : (!result) ? <h1>loading</h1>
+                : <Table
+                  pattern={searchValue}
+                  list={result.hits}
+                  onDismiss={this.onDismiss}
+                  onSort={this.onSort}
+                  sortKey={sortKey}
+                />
+          }
+          <Button
+            onClick={() => this.fetchSearchTopStories(searchValue, page + 1, hitsPerPage)}
+          >
+            more
+          </Button>
+>>>>>>> 5e88de71fcda7e00a92ec3efc0154e4415ffbe02
         </div>
       </div>
     );
@@ -106,3 +160,9 @@ class App extends Component {
 }
 
 export default App;
+
+export {
+  Button,
+  Search,
+  Table
+};
