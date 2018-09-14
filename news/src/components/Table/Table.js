@@ -10,42 +10,38 @@ const SORTS = {
     NUM_COMMENTS: list => sortBy(list, "num_comments")
 }
 
-const Table = ({ list, onDismiss, onSort, sortKey }) => {
-    const sortedList = SORTS[]
+const Table = ({ list, onDismiss, onSort, sortKey, isSortReverse, onSortReverseClick }) => {
+    const sortedList = (!isSortReverse) ?
+    SORTS[sortKey](list):
+    SORTS[sortKey](list).reverse();
+    ;
     return (
         <div className="Table">
-            {list.map(item => {
+            <Sort
+                onSort={onSort}
+                sortKey={sortKey}
+                isSortReverse={isSortReverse}
+                onSortReverseClick={onSortReverseClick}
+            />
+            {sortedList.map(item => {
                 return (
-                    <div>
-                        <span>sort by:</span>
-                        <Sort onSort={onSort}
-                            sortKey="comments"
-                        >
-                            comments
-                        </Sort>
-                        <Sort onSort={onSort}
-                            sortKey="points"
-                        >
-                            points
-                        </Sort>
-                        <div key={item.objectID} className="Table-row">
+                    <div key={item.objectID} className="Table-row">
 
-                            <span>
-                                <a href={item.url}>{item.title}</a>
-                            </span>
-                            <span>Author:{item.author}</span>
-                            <span>Comments:{item.num_comments}</span>
-                            <span>Likes:{item.points}</span>
-                            <span>
-                                <Button
-                                    className=""
-                                    onClick={() => onDismiss(item.objectID)}
-                                    type="button"
-                                >
-                                    remove
+                        <span>
+                            <a href={item.url}>{item.title}</a>
+                        </span>
+                        <span>Author:{item.author}</span>
+                        <span>Comments:{item.num_comments}</span>
+                        <span>Likes:{item.points}</span>
+                        <span>
+                            <Button
+                                className=""
+                                onClick={() => onDismiss(item.objectID)}
+                                type="button"
+                            >
+                                remove
                             </Button>
-                            </span>
-                        </div>
+                        </span>
                     </div>
                 );
             })}

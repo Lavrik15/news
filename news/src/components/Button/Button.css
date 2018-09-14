@@ -6,6 +6,15 @@
     color: white;
 }
 
-.btn--tomato {
-    background-color: tomato; 
+.btn--gray {
+    background-color:#9fc2c9; 
+}
+
+.btn-sort {
+    padding: 3px 0px;
+    border-radius: 3px;
+}
+.btn--search {
+    height: 22px;
+    padding: 0px;
 }

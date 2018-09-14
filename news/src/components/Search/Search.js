@@ -15,6 +15,8 @@ const Search = ({ onSearchChange, value, onSubmit, children}) =>
         </label>
         <Button 
             type="submit"
+            className="btn--search"
+            onClick={f => f}
         >
             {children}
         </Button>

@@ -10,8 +10,7 @@ import {
   PATH_SEARCH,
   PARAM_SEARCH,
   PARAM_PAGE,
-  HITS_PER_PAGE,  
-  url
+  HITS_PER_PAGE
 } from '../constants/index.js';
 
 import './App.css';
@@ -21,16 +20,11 @@ class App extends Component {
     super(props);
 
     this.state = {
-<<<<<<< HEAD
-      results: null,
-      searchKey: "",
-      searchValue: DEAFULT_QUERY
-=======
       result: null,
       searchValue: DEAFULT_QUERY,
       error: null,
-      sortKey: "NONE"
->>>>>>> 5e88de71fcda7e00a92ec3efc0154e4415ffbe02
+      sortKey: "NONE",
+      isSortReverse: false
     };
     this.onDismiss = this.onDismiss.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
@@ -39,6 +33,7 @@ class App extends Component {
     this.fetchSearchTopStories = this.fetchSearchTopStories.bind(this);
     this.onSearchSubmit = this.onSearchSubmit.bind(this);
     this.onSort = this.onSort.bind(this);
+    this.onSortReverseClick = this.onSortReverseClick.bind(this);
   }
   fetchSearchTopStories(searchValue, page = 0, hitsPerPage = 5) {
     axios({
@@ -53,18 +48,12 @@ class App extends Component {
     this.setState({ sortKey });
   }
   onSearchSubmit(event) {
-<<<<<<< HEAD
-    const {searchValue, result} = this.state;
-    const page = result.page
-    const hitsPerPage = result.hitsPerPage;
-=======
     const { searchValue, result } = this.state;
     const page = (result && result.page) || 0;
     const hitsPerPage = (result && result.hitsPerPage) || 5;
 
     this.setState({ result: null });
 
->>>>>>> 5e88de71fcda7e00a92ec3efc0154e4415ffbe02
     this.fetchSearchTopStories(searchValue, page, hitsPerPage);
 
     event.preventDefault();
@@ -75,16 +64,10 @@ class App extends Component {
     });
   }
   onSelectChange(event) {
-<<<<<<< HEAD
-    const {searchValue, result} = this.state;
-    const page = result.page
-    this.fetchSearchTopStories(searchValue, page, event.target.value);
-=======
     const { searchValue, result } = this.state;
     const page = (result && result.page) || 0;
     const hitsPerPage = event.target.value;
     this.fetchSearchTopStories(searchValue, page, hitsPerPage);
->>>>>>> 5e88de71fcda7e00a92ec3efc0154e4415ffbe02
   }
   setTopSearchStories(result) {
     this.setState({ result })
@@ -103,9 +86,13 @@ class App extends Component {
     });
   }
 
+  onSortReverseClick(isSortReverse) {
+    this.setState({ isSortReverse });
+  }
+
   render() {
     console.log(this.state);
-    const { result, searchValue, error, sortKey } = this.state;
+    const { result, searchValue, error, sortKey, isSortReverse } = this.state;
     const page = (result && result.page) || 0;
     const hitsPerPage = (result && result.hitsPerPage) || 5;
 
@@ -122,20 +109,6 @@ class App extends Component {
           <Select
             onChange={this.onSelectChange}
           />
-<<<<<<< HEAD
-          {(!result) ? <h1>loading</h1> :
-            <Table
-              pattern={searchValue}
-              list={result.hits}
-              onDismiss={this.onDismiss}
-            />}
-            <Button
-              onClick={() => this.fetchSearchTopStories(searchValue, page + 1, hitsPerPage)}
-              className="btn--tomato"
-            >
-              more
-            </Button>
-=======
           {
             (error) ? <p>something went wrong</p>
               : (!result) ? <h1>loading</h1>
@@ -145,14 +118,16 @@ class App extends Component {
                   onDismiss={this.onDismiss}
                   onSort={this.onSort}
                   sortKey={sortKey}
+                  isSortReverse={isSortReverse}
+                  onSortReverseClick={this.onSortReverseClick}
                 />
           }
           <Button
             onClick={() => this.fetchSearchTopStories(searchValue, page + 1, hitsPerPage)}
+            className="btn--gray"
           >
             more
           </Button>
->>>>>>> 5e88de71fcda7e00a92ec3efc0154e4415ffbe02
         </div>
       </div>
     );
