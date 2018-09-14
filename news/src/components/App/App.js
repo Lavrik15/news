@@ -23,7 +23,8 @@ class App extends Component {
     this.state = {
       result: null,
       searchValue: DEAFULT_QUERY,
-      error: null
+      error: null,
+      sortKey: "NONE"
     };
     this.onDismiss = this.onDismiss.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
@@ -31,6 +32,7 @@ class App extends Component {
     this.setTopSearchStories = this.setTopSearchStories.bind(this);
     this.fetchSearchTopStories = this.fetchSearchTopStories.bind(this);
     this.onSearchSubmit = this.onSearchSubmit.bind(this);
+    this.onSort = this.onSort.bind(this);
   }
   fetchSearchTopStories(searchValue, page = 0, hitsPerPage = 5) {
     axios({
@@ -40,6 +42,9 @@ class App extends Component {
     })
       .then(result => this.setTopSearchStories(result.data))
       .catch(error => this.setState({ error }))
+  }
+  onSort(sortKey) {
+    this.setState({ sortKey });
   }
   onSearchSubmit(event) {
     const { searchValue, result } = this.state;
@@ -82,7 +87,7 @@ class App extends Component {
 
   render() {
     console.log(this.state);
-    const { result, searchValue, error } = this.state;
+    const { result, searchValue, error, sortKey } = this.state;
     const page = (result && result.page) || 0;
     const hitsPerPage = (result && result.hitsPerPage) || 5;
 
@@ -106,6 +111,8 @@ class App extends Component {
                   pattern={searchValue}
                   list={result.hits}
                   onDismiss={this.onDismiss}
+                  onSort={this.onSort}
+                  sortKey={sortKey}
                 />
           }
           <Button
