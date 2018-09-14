@@ -18,7 +18,8 @@ class App extends Component {
     super(props);
 
     this.state = {
-      result: null,
+      results: null,
+      searchKey: "",
       searchValue: DEAFULT_QUERY
     };
     this.onDismiss = this.onDismiss.bind(this);
@@ -36,8 +37,8 @@ class App extends Component {
   }
   onSearchSubmit(event) {
     const {searchValue, result} = this.state;
-    const page = (result && result.page) || 0;
-    const hitsPerPage = (result && result.hitsPerPage) || 5;
+    const page = result.page
+    const hitsPerPage = result.hitsPerPage;
     this.fetchSearchTopStories(searchValue, page, hitsPerPage);
     event.preventDefault();
   }
@@ -48,9 +49,8 @@ class App extends Component {
   }
   onSelectChange(event) {
     const {searchValue, result} = this.state;
-    const page = (result && result.page) || 0;
-    const hitsPerPage = event.target.value;
-    this.fetchSearchTopStories(searchValue, page, hitsPerPage);
+    const page = result.page
+    this.fetchSearchTopStories(searchValue, page, event.target.value);
   }
   setTopSearchStories(result) {
     this.setState({ result })
@@ -95,6 +95,7 @@ class App extends Component {
             />}
             <Button
               onClick={() => this.fetchSearchTopStories(searchValue, page + 1, hitsPerPage)}
+              className="btn--tomato"
             >
               more
             </Button>

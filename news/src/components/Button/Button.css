@@ -5,3 +5,7 @@
     border: none;
     color: white;
 }
+
+.btn--tomato {
+    background-color: tomato; 
+}
